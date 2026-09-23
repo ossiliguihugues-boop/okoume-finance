@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="46" fill="#123526"/>
+  <path d="M25 55 L40 45 L55 52 L48 62 L33 65 Z" fill="#3FA65C"/>
+  <path d="M75 55 L60 45 L45 52 L52 62 L67 65 Z" fill="#E8B33D"/>
+  <circle cx="50" cy="48" r="7" fill="#2F7DE1"/>
+  <text x="50" y="51" text-anchor="middle" font-family="Georgia, serif" font-size="8" fill="#F3EFE3">₣</text>
+</svg>

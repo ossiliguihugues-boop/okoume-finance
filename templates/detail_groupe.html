@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block titre %}{{ groupe.nom }} — Okoumé Finance{% endblock %}
+{% block theme %}bleu{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>{{ groupe.nom }}</h1>
+        <p>{{ groupe.montant_cotisation }} FCFA / {{ groupe.frequence }} — {{ groupe.membres|length }} / {{ groupe.nb_membres }} places</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p class="message-etat">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
+
+    <h2>Membres</h2>
+    <div class="grille-membres">
+        {% for membre in groupe.membres %}
+            <div class="carte-membre">
+                <form method="POST" action="/membre/{{ membre.id }}/supprimer" onsubmit="return confirm('Retirer {{ membre.utilisateur.nom }} de ce groupe ?');" class="bouton-retrait">
+                    <button type="submit" title="Retirer ce membre">✕</button>
+                </form>
+                <div class="avatar-membre">{{ membre.utilisateur.nom[:2]|upper }}</div>
+                <span class="nom-membre">{{ membre.utilisateur.nom }}</span>
+                <span class="tour-membre">Tour n°{{ membre.ordre_tour }}</span>
+            </div>
+        {% endfor %}
+        <a href="#ajouter-membre" class="carte-ajout">+</a>
+    </div>
+
+    <h2 id="ajouter-membre">Ajouter un membre</h2>
+    <form method="POST">
+        <label>Nom</label>
+        <input type="text" name="nom" required>
+        <label>Téléphone</label>
+        <input type="text" name="telephone" required>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <h2>Cycle de cotisation</h2>
+    {% if cycle_actif %}
+        <p>Cycle en cours — Bénéficiaire : <strong>{{ cycle_actif.beneficiaire.utilisateur.nom }}</strong></p>
+        <p>Démarré le : {{ cycle_actif.date_debut }}</p>
+        <h3>Suivi des paiements</h3>
+        <ul class="liste-cartes">
+            {% for cotisation in cycle_actif.cotisations %}
+                <li>
+                    {{ cotisation.membre.utilisateur.nom }} —
+                    {% if cotisation.statut == 'paye' %}
+                        <strong>Payé</strong> (le {{ cotisation.date_paiement }})
+                        {% if cotisation.reference_transaction %}
+                            <br><small style="color:var(--text-muted);">{{ cotisation.operateur }} — Réf : {{ cotisation.reference_transaction }}</small>
+                        {% endif %}
+                    {% else %}
+                        En attente
+                        <a href="/cotisation/{{ cotisation.id }}/payer-mobile-money" style="text-decoration:none;">
+                            <button type="button">Payer Mobile Money</button>
+                        </a>
+                        <form method="POST" action="/cotisation/{{ cotisation.id }}/marquer-paye" style="display:inline;">
+                            <button type="submit">Marquer payé (manuel)</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="message-etat">Aucun cycle en cours — le dernier cycle est terminé ou aucun cycle n'a encore démarré.</p>
+        <form method="POST" action="/groupe/{{ groupe.id }}/nouveau-cycle">
+            <button type="submit">Démarrer un nouveau cycle</button>
+        </form>
+    {% endif %}
+
+    <form method="POST" action="/groupe/{{ groupe.id }}/supprimer" onsubmit="return confirm('Supprimer définitivement ce groupe et toutes ses données ?');" style="margin-top:20px;">
+        <button type="submit" style="background: linear-gradient(90deg, #b3372c, #7a2620); color:#F3EFE3;">Supprimer ce groupe</button>
+    </form>
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}

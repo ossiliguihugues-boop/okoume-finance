@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block titre %}Vérification — Okoumé Finance{% endblock %}
+{% block theme %}jaune{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Vérifiez votre numéro</h1>
+        <p>{{ utilisateur.telephone }}</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p class="message-etat">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
+
+    <div class="avertissement-simulation">
+        Ceci est une simulation. Un vrai SMS n'est pas envoyé — le code s'affiche ci-dessus dans le message jaune, exactement comme il apparaîtrait sur votre téléphone.
+    </div>
+
+    <form method="POST">
+        <label>Code reçu par SMS (6 chiffres)</label>
+        <input type="text" name="code" maxlength="6" required autofocus>
+        <button type="submit">Vérifier</button>
+    </form>
+{% endblock %}

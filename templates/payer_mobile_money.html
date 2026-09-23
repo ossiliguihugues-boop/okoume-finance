@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block titre %}Paiement Mobile Money — Okoumé Finance{% endblock %}
+{% block theme %}vert{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Payer ma cotisation</h1>
+        <p id="montant-affiche" data-montant="{{ cotisation.montant }}">{{ cotisation.montant }} FCFA</p>
+    </div>
+
+    <div class="avertissement-simulation">
+        Ceci est une simulation de paiement. L'intégration réelle avec Airtel Money / Moov Money nécessite un compte marchand officiel.
+    </div>
+
+    <label>Devise d'affichage</label>
+    <select id="devise" onchange="convertirMontant()">
+        <option value="FCFA">Franc CFA (FCFA)</option>
+        <option value="MAD">Dirham marocain (MAD)</option>
+        <option value="EUR">Euro (EUR)</option>
+    </select>
+    <p style="font-size:11px; color:var(--text-muted); margin-top:-8px;">Taux approximatifs, à titre indicatif — le débit réel se fait toujours en FCFA.</p>
+
+    <form method="POST">
+        <label>Opérateur</label>
+        <select name="operateur" required>
+            <option value="Airtel Money">Airtel Money</option>
+            <option value="Moov Money">Moov Money</option>
+        </select>
+
+        <label>Numéro de téléphone (enregistré chez l'opérateur)</label>
+        <input type="text" name="numero" placeholder="07 XX XX XX XX" required>
+
+        <p style="font-size:12px; color:var(--text-muted);">
+            Après confirmation, vous recevrez une notification sur ce numéro pour valider le paiement avec votre code secret directement dans l'application ou le menu USSD de votre opérateur — jamais sur ce site.
+        </p>
+
+        <button type="submit">Envoyer la demande de paiement</button>
+    </form>
+    <a href="/groupe/{{ cotisation.cycle.groupe_id }}" class="retour">Annuler</a>
+
+    <script>
+        function convertirMontant() {
+            var element = document.getElementById('montant-affiche');
+            var montantFCFA = parseFloat(element.getAttribute('data-montant'));
+            var devise = document.getElementById('devise').value;
+
+            var taux = {};
+            taux.FCFA = 1;
+            taux.MAD = 0.017;
+            taux.EUR = 0.0015;
+
+            var symboles = {};
+            symboles.FCFA = 'FCFA';
+            symboles.MAD = 'MAD';
+            symboles.EUR = 'EUR';
+
+            var converti = (montantFCFA * taux[devise]).toFixed(2);
+            element.innerText = converti + ' ' + symboles[devise];
+        }
+    </script>
+{% endblock %}

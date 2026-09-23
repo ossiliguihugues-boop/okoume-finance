@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block titre %}Nouveau groupe — Okoumé Finance{% endblock %}
+{% block theme %}jaune{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Créer un groupe de tontine</h1>
+        <p>Définis les règles de cotisation</p>
+    </div>
+    <form method="POST">
+        <label>Nom du groupe</label>
+        <input type="text" name="nom" required>
+        <label>Montant de la cotisation (FCFA)</label>
+        <input type="number" name="montant" step="0.01" required>
+        <label>Fréquence</label>
+        <select name="frequence">
+            <option value="hebdomadaire">Hebdomadaire</option>
+            <option value="mensuelle">Mensuelle</option>
+        </select>
+        <label>Nombre de membres</label>
+        <input type="number" name="nb_membres" required>
+        <button type="submit">Créer le groupe</button>
+    </form>
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}

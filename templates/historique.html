@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block titre %}Historique — Okoumé Finance{% endblock %}
+{% block theme %}jaune{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Mon historique de paiements</h1>
+        <p>{{ transactions|length }} transaction(s) enregistrée(s)</p>
+    </div>
+
+    <a href="/historique/export" class="retour" style="display:inline-block; margin-bottom:16px;">📥 Exporter en CSV (compatible Excel)</a>
+
+    <ul class="liste-cartes">
+        {% for t in transactions %}
+            <li>
+                {{ t.date_paiement.strftime('%d/%m/%Y') if t.date_paiement else '' }} —
+                <strong>{{ t.cycle.groupe.nom }}</strong> —
+                {{ t.montant }} FCFA
+                {% if t.operateur %}
+                    <br><small style="color:var(--text-muted);">{{ t.operateur }} — Réf : {{ t.reference_transaction }}</small>
+                {% else %}
+                    <br><small style="color:var(--text-muted);">Paiement manuel</small>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}

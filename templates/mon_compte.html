@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block titre %}Mon compte — Okoumé Finance{% endblock %}
+{% block theme %}jaune{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Mon compte</h1>
+        <p>{{ current_user.nom }} — {{ current_user.telephone }}</p>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p style="color:#E8B33D;">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
+
+    <h2>Changer mon mot de passe</h2>
+    <form method="POST">
+        <label>Ancien mot de passe</label>
+        <input type="password" name="ancien_mot_de_passe" id="ancien" required>
+
+        <label>Nouveau mot de passe</label>
+        <input type="password" name="nouveau_mot_de_passe" id="nouveau" required>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px;">
+            <input type="checkbox" onclick="
+                document.getElementById('ancien').type = this.checked ? 'text' : 'password';
+                document.getElementById('nouveau').type = this.checked ? 'text' : 'password';
+            " style="width:auto; margin:0;">
+            Afficher les mots de passe
+        </label>
+
+        <button type="submit">Mettre à jour</button>
+    </form>
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}

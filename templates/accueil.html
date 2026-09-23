@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block titre %}Mes groupes — Okoumé Finance{% endblock %}
+{% block theme %}vert{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Mes groupes de tontine</h1>
+        <p>Choisissez un groupe pour voir les détails</p>
+    </div>
+
+    {% if rappels %}
+        <div class="rappel-cotisation">
+            <strong>Rappel :</strong> vous avez {{ rappels|length }} cotisation(s) en attente
+            <ul>
+                {% for r in rappels %}
+                    <li>{{ r.groupe }} — {{ r.montant }} FCFA (cycle démarré le {{ r.depuis }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <div class="grille-groupes">
+        {% for groupe in groupes %}
+            <a href="/groupe/{{ groupe.id }}" class="bouton-groupe">
+                <span class="nom-groupe">{{ groupe.nom }}</span>
+                <span class="detail-groupe">{{ groupe.montant_cotisation }} FCFA / {{ groupe.frequence }}</span>
+            </a>
+        {% endfor %}
+    </div>
+
+    <a href="/nouveau-groupe" class="retour">+ Créer un nouveau groupe</a>
+{% endblock %}

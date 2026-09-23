@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titre %}Okoumé Finance{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body data-theme="{% block theme %}vert{% endblock %}">
+    <div class="fond-anime"></div>
+    <div class="bande-signature"></div>
+
+    <header class="entete">
+        <a href="/" class="marque">
+            <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Okoumé Finance">
+            <span>Okoumé Finance</span>
+        </a>
+
+        <div class="entete-droite">
+            <div class="horloge" id="horloge">--:--</div>
+            <nav class="menu">
+                <button class="menu-bouton">Menu ▾</button>
+                <div class="menu-liste">
+                    <a href="/">Mes groupes</a>
+                    <a href="/nouveau-groupe">Créer un groupe</a>
+                    <a href="/mon-compte">Mon compte</a>
+                    <a href="/historique">Historique</a>
+                    <a href="/journal">Journal d'activité</a>
+                    <a href="/admin">Tableau de bord</a>
+                    <a href="/deconnexion">Se déconnecter</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block contenu %}{% endblock %}
+    </main>
+
+    <footer class="pied">
+        <div class="bande-defilante">
+            <span>Okoumé Finance — la tontine digitale, à la gabonaise • WhatsApp : +212 6 21 83 72 06 • Rejoignez un groupe dès aujourd'hui • Okoumé Finance — la tontine digitale, à la gabonaise • WhatsApp : +212 6 21 83 72 06 •</span>
+        </div>
+        <div class="pied-bas">
+            <div class="liens-contact">
+                <a href="https://wa.me/212621837206" target="_blank" title="WhatsApp">☎</a>
+                <a href="mailto:contact@okoumefinance.ga" title="Email">✉</a>
+                <a href="#" title="Site web">🌐</a>
+            </div>
+            Okoumé Finance — digitaliser la tontine, à la gabonaise.
+            <div class="copyright">© 2026 Okoumé Finance — Créé par Hugues-Paulinho Okolo-Ossiligui. Tous droits réservés.</div>
+        </div>
+    </footer>
+
+    <script>
+        function majHorloge() {
+            var el = document.getElementById('horloge');
+            if (!el) return;
+            var maintenant = new Date();
+            var jours = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+            var mois = ['jan','fév','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+            var jour = jours[maintenant.getDay()];
+            var date = maintenant.getDate();
+            var m = mois[maintenant.getMonth()];
+            var h = String(maintenant.getHours()).padStart(2, '0');
+            var min = String(maintenant.getMinutes()).padStart(2, '0');
+            el.innerHTML = '<span class="horloge-heure">' + h + ':' + min + '</span>' +
+                            '<span class="horloge-date">' + jour + ' ' + date + ' ' + m + '</span>';
+        }
+        majHorloge();
+        setInterval(majHorloge, 15000);
+    </script>
+</body>
+</html>

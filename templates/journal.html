@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block titre %}Journal — Okoumé Finance{% endblock %}
+{% block theme %}jaune{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Journal d'activité</h1>
+        <p>Les 50 dernières actions enregistrées</p>
+    </div>
+    <ul class="liste-cartes">
+        {% for e in entrees %}
+            <li>{{ e.date_heure.strftime('%d/%m/%Y %H:%M') }} — <strong>{{ e.action }}</strong> — {{ e.details }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}

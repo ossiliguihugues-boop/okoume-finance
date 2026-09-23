@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block titre %}Connexion — Okoumé Finance{% endblock %}
+{% block contenu %}
+    <h1>Connexion</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p style="color:#E8B33D;">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label>Téléphone</label>
+        <input type="text" name="telephone" required>
+
+        <label>Mot de passe</label>
+        <input type="password" name="mot_de_passe" id="mdp" required>
+
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px;">
+            <input type="checkbox" onclick="document.getElementById('mdp').type = this.checked ? 'text' : 'password';" style="width:auto; margin:0;">
+            Afficher le mot de passe
+        </label>
+
+        <button type="submit">Se connecter</button>
+    </form>
+    <a href="/inscription" class="retour">Pas encore de compte ? S'inscrire</a>
+{% endblock %}

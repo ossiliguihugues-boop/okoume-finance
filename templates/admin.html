@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block titre %}Tableau de bord — Okoumé Finance{% endblock %}
+{% block theme %}bleu{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        <h1>Tableau de bord</h1>
+        <p>Vue d'ensemble de la plateforme</p>
+    </div>
+
+    <div class="grille-stats">
+        <div class="carte-stat">
+            <span class="stat-valeur">{{ nb_utilisateurs }}</span>
+            <span class="stat-label">Utilisateurs</span>
+        </div>
+        <div class="carte-stat">
+            <span class="stat-valeur">{{ nb_groupes }}</span>
+            <span class="stat-label">Groupes</span>
+        </div>
+        <div class="carte-stat">
+            <span class="stat-valeur">{{ nb_cycles_actifs }}</span>
+            <span class="stat-label">Cycles actifs</span>
+        </div>
+        <div class="carte-stat">
+            <span class="stat-valeur">{{ "%.0f"|format(volume_total) }}</span>
+            <span class="stat-label">FCFA cotisés (total)</span>
+        </div>
+    </div>
+
+    <h2>Dernières actions</h2>
+    <ul class="liste-cartes">
+        {% for a in dernieres_actions %}
+            <li>{{ a.date_heure.strftime('%d/%m %H:%M') }} — <strong>{{ a.action }}</strong> — {{ a.details }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}
