@@ -6,10 +6,11 @@ import random
 import string
 import csv
 import io
+import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tontine.db'
-app.config['SECRET_KEY'] = 'change-moi-plus-tard'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'change-moi-plus-tard')
 
 db.init_app(app)
 
@@ -66,6 +67,7 @@ def inscription():
 @app.route('/verifier-telephone/<int:utilisateur_id>', methods=['GET', 'POST'])
 def verifier_telephone(utilisateur_id):
     utilisateur = Utilisateur.query.get_or_404(utilisateur_id)
+
     if request.method == 'POST':
         code_saisi = request.form['code']
 
@@ -130,11 +132,27 @@ def mon_compte():
     return render_template('mon_compte.html')
 
 
+@app.route('/profil/<int:utilisateur_id>', methods=['GET', 'POST'])
+@login_required
+def profil_membre(utilisateur_id):
+    utilisateur = Utilisateur.query.get_or_404(utilisateur_id)
+
+    if request.method == 'POST' and utilisateur.id == current_user.id:
+        utilisateur.photo_url = request.form.get('photo_url', '')
+        utilisateur.bio = request.form.get('bio', '')
+        db.session.commit()
+        flash("Profil mis a jour.")
+        return redirect(url_for('profil_membre', utilisateur_id=utilisateur.id))
+
+    return render_template('profil_membre.html', utilisateur=utilisateur)
+
+
 @app.route('/journal')
 @login_required
 def journal():
     entrees = JournalAudit.query.order_by(JournalAudit.date_heure.desc()).limit(50).all()
     return render_template('journal.html', entrees=entrees)
+
 
 @app.route('/admin')
 @login_required
@@ -208,6 +226,12 @@ def export_historique():
     reponse.headers['Content-Disposition'] = 'attachment; filename=historique_okoume_finance.csv'
     return reponse
 
+
+@app.route('/mentions-legales')
+def mentions_legales():
+    return render_template('mentions_legales.html')
+
+
 @app.route('/')
 @login_required
 def accueil():
@@ -238,12 +262,16 @@ def nouveau_groupe():
         montant = request.form['montant']
         frequence = request.form['frequence']
         nb_membres = request.form['nb_membres']
+        description = request.form.get('description', '')
+        photo_url = request.form.get('photo_url', '')
 
         groupe = GroupeTontine(
             nom=nom,
             montant_cotisation=montant,
             frequence=frequence,
-            nb_membres=nb_membres
+            nb_membres=nb_membres,
+            description=description,
+            photo_url=photo_url
         )
         db.session.add(groupe)
         db.session.commit()
@@ -285,6 +313,7 @@ def detail_groupe(groupe_id):
     cycle_actif = Cycle.query.filter_by(groupe_id=groupe.id, statut='en_cours').first()
 
     return render_template('detail_groupe.html', groupe=groupe, cycle_actif=cycle_actif)
+
 
 @app.route('/groupe/<int:groupe_id>/supprimer', methods=['POST'])
 @login_required

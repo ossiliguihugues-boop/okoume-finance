@@ -5,6 +5,7 @@
     <div class="entete-page">
         <h1>{{ groupe.nom }}</h1>
         <p>{{ groupe.montant_cotisation }} FCFA / {{ groupe.frequence }} — {{ groupe.membres|length }} / {{ groupe.nb_membres }} places</p>
+        {% if groupe.description %}<p>{{ groupe.description }}</p>{% endif %}
     </div>
 
     {% with messages = get_flashed_messages() %}
@@ -20,7 +21,13 @@
                 <form method="POST" action="/membre/{{ membre.id }}/supprimer" onsubmit="return confirm('Retirer {{ membre.utilisateur.nom }} de ce groupe ?');" class="bouton-retrait">
                     <button type="submit" title="Retirer ce membre">✕</button>
                 </form>
-                <div class="avatar-membre">{{ membre.utilisateur.nom[:2]|upper }}</div>
+                <a href="/profil/{{ membre.utilisateur.id }}" style="text-decoration:none;">
+                    {% if membre.utilisateur.photo_url %}
+                        <img src="{{ membre.utilisateur.photo_url }}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+                    {% else %}
+                        <div class="avatar-membre">{{ membre.utilisateur.nom[:2]|upper }}</div>
+                    {% endif %}
+                </a>
                 <span class="nom-membre">{{ membre.utilisateur.nom }}</span>
                 <span class="tour-membre">Tour n°{{ membre.ordre_tour }}</span>
             </div>

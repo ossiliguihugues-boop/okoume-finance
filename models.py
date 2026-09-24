@@ -9,7 +9,6 @@ db = SQLAlchemy()
 
 
 class ChampChiffre(TypeDecorator):
-    """Type de colonne qui chiffre/dechiffre automatiquement une valeur numerique."""
     impl = String
     cache_ok = True
 
@@ -28,6 +27,8 @@ class Utilisateur(db.Model, UserMixin):
     mot_de_passe_hash = db.Column(db.String(200), nullable=False)
     telephone_verifie = db.Column(db.Boolean, default=False)
     code_verification = db.Column(db.String(10))
+    photo_url = db.Column(db.String(300))
+    bio = db.Column(db.String(300))
 
     memberships = db.relationship('MembreGroupe', backref='utilisateur', lazy=True)
 
@@ -44,6 +45,8 @@ class GroupeTontine(db.Model):
     montant_cotisation = db.Column(ChampChiffre(300), nullable=False)
     frequence = db.Column(db.String(20), nullable=False)
     nb_membres = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(500))
+    photo_url = db.Column(db.String(300))
 
     membres = db.relationship('MembreGroupe', backref='groupe', lazy=True)
     cycles = db.relationship('Cycle', backref='groupe', lazy=True)

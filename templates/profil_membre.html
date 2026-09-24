@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block titre %}{{ utilisateur.nom }} — Okoumé Finance{% endblock %}
+{% block theme %}vert{% endblock %}
+{% block contenu %}
+    <div class="entete-page">
+        {% if utilisateur.photo_url %}
+            <img src="{{ utilisateur.photo_url }}" class="photo-profil" alt="{{ utilisateur.nom }}">
+        {% else %}
+            <div class="avatar-membre" style="width:72px;height:72px;font-size:24px;">{{ utilisateur.nom[:2]|upper }}</div>
+        {% endif %}
+        <h1>{{ utilisateur.nom }}</h1>
+        {% if utilisateur.bio %}<p>{{ utilisateur.bio }}</p>{% endif %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <p class="message-etat">{{ messages[0] }}</p>
+        {% endif %}
+    {% endwith %}
+
+    {% if utilisateur.id == current_user.id %}
+        <h2>Modifier mon profil</h2>
+        <form method="POST">
+            <label>Lien d'une photo (URL)</label>
+            <input type="text" name="photo_url" value="{{ utilisateur.photo_url or '' }}" placeholder="https://...">
+            <label>Bio courte</label>
+            <input type="text" name="bio" value="{{ utilisateur.bio or '' }}" maxlength="150">
+            <button type="submit">Enregistrer</button>
+        </form>
+    {% endif %}
+    <a href="/" class="retour">Retour à l'accueil</a>
+{% endblock %}

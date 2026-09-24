@@ -307,3 +307,10 @@ footer.pied {
   color: var(--text-muted);
   margin-top: 4px;
 }
+
+.photo-profil { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+
+.photo-profil { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+.icone-whatsapp { display: inline-flex; }
+.icone-whatsapp svg { transition: transform 0.15s ease; }
+.icone-whatsapp:hover svg { transform: scale(1.15); }
