@@ -1,9 +1,12 @@
 ﻿from cryptography.fernet import Fernet
 import os
 
-CHEMIN_CLE = 'cle_secrete.key'
-
 def obtenir_cle():
+    cle_env = os.environ.get('ENCRYPTION_KEY')
+    if cle_env:
+        return cle_env.encode()
+
+    CHEMIN_CLE = 'cle_secrete.key'
     if not os.path.exists(CHEMIN_CLE):
         cle = Fernet.generate_key()
         with open(CHEMIN_CLE, 'wb') as f:
